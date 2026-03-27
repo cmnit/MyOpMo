@@ -1,0 +1,72 @@
+;; ==========================================
+;; 1. DEFINE AND PROCESS THE FIRST PART
+;; ==========================================
+(setf list-part-1
+      '((0 4 8 12 12 16 20 24) (0 -3 -6 -9 12 9 6 3) (0 4 1 -2 12 9 13 10)
+        (0 -3 1 -2 12 9 6 10) (0 4 8 12 12 9 13 10) (0 -3 1 -2 12 16 20 24)
+        (0 -3 1 -2 12 9 6 3) (0 -3 -6 -9 12 9 13 10) (0 4 8 12 12 9 13 17)
+        (0 4 8 5 12 16 20 24) (0 4 8 12 12 9 6 3) (0 -3 -6 -9 12 16 20 24)
+        (0 4 1 5 12 16 20 24) (0 4 8 12 12 16 13 17) (0 -3 -6 -2 12 9 6 3)
+        (0 -3 -6 -9 12 16 13 10) (0 4 1 -2 12 16 20 17) (0 -3 1 5 12 9 6 10)
+        (0 4 8 5 12 9 6 3) (0 -3 -6 -9 12 9 13 17) (0 4 1 -2 12 16 13 17)
+        (0 4 1 5 12 9 6 10) (0 -3 -6 -9 12 9 6 10) (0 4 1 -2 12 9 6 3)
+        (0 4 1 -2 12 16 20 24) (0 4 8 12 12 9 6 10) (0 4 1 -2 12 9 6 10)
+        (0 -3 1 5 12 16 20 17) (0 -3 1 -2 12 9 13 10) (0 4 1 5 12 16 13 17)))
+
+(setf pitches-1 (integer-to-pitch list-part-1))
+
+;; Define the 12/8 rhythm
+(setf my-rhythm '(e e e e -q e e e e -q))
+
+;; Build OMN for part 1
+(setf melody-1 (make-omn :pitch pitches-1 :length my-rhythm :velocity '(mf)))
+
+
+;; ==========================================
+;; 2. DEFINE THE REST MEASURE
+;; ==========================================
+;; A dotted whole rest (-w.) perfectly fills one 12/8 measure
+;; We wrap it in an extra set of parentheses so Opusmodus treats it as a distinct bar
+(setf bridge-rest '((-w.)))
+
+
+;; ==========================================
+;; 3. DEFINE AND PROCESS THE SECOND PART
+;; ==========================================
+(setf list-part-2
+      '((0 -3 -6 -2 12 16 20 17) (0 -3 1 5 12 16 13 10) (0 -3 -6 -2 12 16 20 24)
+        (0 4 8 12 12 16 13 10) (0 -3 -6 -9 12 16 13 17) (0 4 1 5 12 9 6 3)
+        (0 4 1 5 12 9 13 17) (0 4 8 5 12 16 13 17) (0 -3 -6 -2 12 9 13 10)
+        (0 -3 1 -2 12 16 13 10) (0 4 8 5 12 9 6 10) (0 4 1 -2 12 9 13 17)
+        (0 4 8 12 12 16 20 17) (0 -3 1 5 12 16 20 24) (0 -3 -6 -9 12 16 20 17)
+        (0 -3 1 5 12 9 6 3) (0 -3 1 -2 12 16 20 17) (0 -3 1 5 12 9 13 10)
+        (0 4 1 5 12 16 20 17) (0 -3 1 5 12 16 13 17) (0 4 1 -2 12 16 13 10)
+        (0 -3 -6 -2 12 9 6 10) (0 -3 -6 -2 12 9 13 17) (0 4 8 5 12 16 13 10)
+        (0 4 1 5 12 16 13 10) (0 -3 -6 -2 12 16 13 17) (0 -3 1 5 12 9 13 17)
+        (0 4 8 5 12 16 20 17) (0 -3 1 -2 12 9 13 17) (0 4 8 5 12 9 13 10)
+        (0 4 8 5 12 9 13 17) (0 -3 -6 -2 12 16 13 10) (0 4 1 5 12 9 13 10)
+        (0 -3 1 -2 12 16 13 17)))
+
+(setf pitches-2 (integer-to-pitch list-part-2))
+
+;; Build OMN for part 2 using the exact same rhythm
+(setf melody-2 (make-omn :pitch pitches-2 :length my-rhythm :velocity '(mf)))
+
+
+;; ==========================================
+;; 4. COMBINE AND PLAY
+;; ==========================================
+;; Use Lisp's 'append' function to combine the three OMN sequences in order
+(setf full-melody (append melody-1 bridge-rest melody-2))
+
+;; Define the final score
+(def-score play-full-form
+    (:title "Two Parts with Bridge Rest"
+     :time-signature '(12 8)
+     :tempo 120)
+  
+  (piano-track
+   :omn full-melody
+   :channel 1
+   :sound 'gm
+   :program 'acoustic-grand-piano))
