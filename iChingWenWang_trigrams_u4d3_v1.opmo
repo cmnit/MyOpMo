@@ -15,11 +15,12 @@
 
 (setf pitches-1 (integer-to-pitch list-part-1))
 
-;; Define the 12/8 rhythm
-(setf my-rhythm '(e e e e -q e e e e -q))
+;; Define the 12/4 rhythm pattern
+(setf my-rhythm '(e e e e -e e e e e -q e e e e -e e e e e -h))
 
 ;; Build OMN for part 1
-(setf melody-1 (make-omn :pitch pitches-1 :length my-rhythm :velocity '(mf)))
+(setf my-lengths-1 (gen-repeat 15 my-rhythm))
+(setf melody-1 (make-omn :length my-lengths-1 :pitch pitches-1 :velocity '(mf)))
 
 
 ;; ==========================================
@@ -48,9 +49,10 @@
         (0 -3 1 -2 12 16 13 17)))
 
 (setf pitches-2 (integer-to-pitch list-part-2))
+(setf my-lengths-2 (gen-repeat 17 my-rhythm))
 
 ;; Build OMN for part 2 using the exact same rhythm
-(setf melody-2 (make-omn :pitch pitches-2 :length my-rhythm :velocity '(mf)))
+(setf melody-2 (make-omn :length my-lengths-2 :pitch pitches-2 :velocity '(mf)))
 
 
 ;; ==========================================
@@ -61,12 +63,13 @@
 
 ;; Define the final score
 (def-score play-full-form
-    (:title "Two Parts with Bridge Rest"
+    (:title "Wen Wang iChing sequence"
      :time-signature '(12 8)
-     :tempo 120)
+     :tempo 200)
   
   (piano-track
    :omn full-melody
    :channel 1
    :sound 'gm
    :program 'acoustic-grand-piano))
+
