@@ -1,0 +1,47 @@
+;; ==========================================
+;; 1. DEFINE STRUCTURES
+;; =====
+
+
+
+
+=====================================
+
+;; Define the rhythm pattern for hexagram
+;; 28s = 14e = 7q
+(setf my-rhythm-hexa '(e s -s e s -s e s -s e s -s e s -s e s -s -q))
+(setf my-rhythm (append my-rhythm-hexa my-rhythm-hexa '(-h)))
+
+;; Define the first hexagrams
+(setf list-hexa-1-2
+      '((0 4 4 8 8 12 12 16 16 20 20 24) (0 -3 -3 -6 -6 -9 12 9 9 6 6 3)))
+(setf list-hexa-3-4
+      '((0 4 4 1 1 -2 12  9  9 13 13 10) (0 -3 -3  1  1 -2 12 9 9 6 6 10)))
+
+
+;; ==========================================
+;; 2. BUILD OMN STRUCTURE
+;; ==========================================
+
+(setf my-lengths (gen-repeat 2 my-rhythm))
+(setf my-pitches (integer-to-pitch (append list-hexa-1-2 list-hexa-3-4)))
+
+(setf my-melody (make-omn :length my-lengths :pitch my-pitches :velocity '(mf)))
+
+;; ==========================================
+;; 3. PLAY
+;; ==========================================
+
+;; Define the final score
+(def-score play-full-form
+    (:title "Wen Wang iChing sequence mapping test"
+     :time-signature '(4 4)
+     :tempo 180)
+  
+  (piano-track
+   :omn my-melody
+   :channel 1
+   :sound 'gm
+   :program 'acoustic-grand-piano))
+
+
